@@ -39,7 +39,7 @@ app.get('/inventario/:id', function(req, res){
 })
 
 // Endpoint Create [POST] /inventario
-app.post('/inventario', function(req,res){
+app.post('/inventario', function(req, res){
     // Acessamos o corpo da requisição
     const body = req.body
 
@@ -56,6 +56,46 @@ app.post('/inventario', function(req,res){
 
     // Exibimos uma mensagem de sucesso
     res.status(201).send('Item adicionado com sucesso: ' + nome)
+})
+
+// Endpoint Update [PUT] /inventario
+app.put('/inventario/:id', function(req, res){
+    // Acessamos o parâmetro de rota ID
+    const id = req.params.id
+
+    // Acessamos o Body da requisição
+    const body = req.body
+
+    // Acessamos a propriedade `nomeDoProduto` do body
+    const nome = body.nome
+
+    // Checando se o `nome` está presente na requisição
+    if (!nome){
+        return res.send(400).send('Corpo da requisição deve conter a propriedade `nome`.')
+    }
+
+    // Atualizamos o item na lista
+    invetario[id - 1] = nome
+
+    // Enviamos uma mensagem de sucesso
+    res.send('Item atualizado com sucesso: ' + id + ' - ' + nome)
+})
+
+// Endpoint Delete [DELETE] /inventario/:id
+app.delete('/inventario/:id', function(req, res){
+    // Acessamos o parâmtro de rota
+    const id = req.params.id
+
+    // Checamos se o item com ID - 1 está na lista
+    if (!invetario[id - 1]) {
+        return res.status(404).send('Item não encontrado.')
+    }
+
+    // Removemos o item da lista
+    delete invetario[id - 1]
+
+    // Enviamos uma mensagem de sucesso
+    res.send('Item removido com sucesso: ' + id)
 })
 
 // Port Number
