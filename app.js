@@ -1,11 +1,17 @@
 // Módulo express
 const express = require('express');
 
+// Módulo cors
+const cors = require('cors')
+
 // Criando o objeto express
 const app = express();
 
 // Sinalizando para o Express que estamos usando JSON no Body
 app.use(express.json())
+// Habilitando cors para que a API seja consumida por diferentes dominios
+app.use(cors())
+
 
 // Handling GET request
 app.get('/', (req, res) => { 
