@@ -20,7 +20,27 @@ app.get('/', (req, res) => {
 })
 
 // Lista em memória para o Inventário
-const invetario = ['Mouse', 'Teclado Gamer', 'Headphone']
+const product = {
+    name: "Mouse Gamer",
+    image:
+      "https://images2.kabum.com.br/produtos/fotos/133482/mouse-gamer-redragon-predator-rgb-m612_1608738736_g.jpg",
+    quantity: "12",
+    shortDescription: "Mouse Gamer de ultima geração"
+  };
+  const product1 = {
+    name: "Teclado Gamer",
+    image:
+      "https://images4.kabum.com.br/produtos/fotos/506054/teclado-gamer-rise-mode-g2-rgb-layout-60-rm-tg-02-b_1709905027_g.jpg",
+    quantity: "23",
+    shortDescription: "Teclado Gamer de ultima geração"
+  };
+  const product2 = {
+    name: "Headphone",
+    quantity: "8",
+    shortDescription: "Headphone de ultima geração"
+  };
+
+const invetario = [product, product1, product2]
 
 // Endpoint Read All (GET) /inventario
 app.get('/inventario', function(req, res){
