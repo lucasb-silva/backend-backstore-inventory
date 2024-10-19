@@ -3,7 +3,7 @@ const express = require('express');
 
 // Módulo cors
 const cors = require('cors');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 // Preparamos as informações de acesso ao banco de dados
 const dbUrl = ''
@@ -32,47 +32,28 @@ async function main() {
   app.use(cors())
 
 
-  // Handling GET request
+  // Requisição GET
   app.get('/', (req, res) => {
     res.send('Aplicativo Node está executando')
     res.end()
   })
 
-  // Lista em memória para o Inventário
-  const produto = {
-    nome: "Mouse Gamer",
-    imagem:
-      "https://images2.kabum.com.br/produtos/fotos/133482/mouse-gamer-redragon-predator-rgb-m612_1608738736_g.jpg",
-    quantidade: "12",
-    descricao: "Mouse Gamer de ultima geração"
-  };
-  const produto1 = {
-    nome: "Teclado Gamer",
-    imagem:
-      "https://images4.kabum.com.br/produtos/fotos/506054/teclado-gamer-rise-mode-g2-rgb-layout-60-rm-tg-02-b_1709905027_g.jpg",
-    quantidade: "23",
-    descricao: "Teclado Gamer de ultima geração"
-  };
-  const produto2 = {
-    nome: "Headphone",
-    quantidade: "8",
-    descricao: "Headphone de ultima geração"
-  };
-
-  const invetario = [produto, produto1, produto2]
-
   // Endpoint Read All (GET) /inventario
-  app.get('/inventario', function (req, res) {
-    // Filtrando itens válidos da lista que não são atualizados no JavaScript
-    res.send(invetario.filter(Boolean))
+  app.get('/inventario', async function (req, res) {
+    // Acessamos a lista de itens na collection do MongoDB
+    const itens = await collection.find().toArray()
+
+    // Enviamos a lista de itens como resultado
+    res.send(itens)
   })
+
   // Endpoint Read by ID [GET:id] /inventario/:id
-  app.get('/inventario/:id', function (req, res) {
+  app.get('/inventario/:id', async function (req, res) {
     // Acessamos o parametro de rota ID
     const id = req.params.id
 
-    // Acessa o item na lista usando o ID-1
-    const item = invetario[id - 1]
+    // Acessa o item na collection usando o ID
+    const item = await collection.findOne({ _id: new ObjectId(id) })
 
     // Checamos se o item existe
     if (!item) {
@@ -84,60 +65,57 @@ async function main() {
   })
 
   // Endpoint Create [POST] /inventario
-  app.post('/inventario', function (req, res) {
+  app.post('/inventario', async function (req, res) {
     // Acessamos o corpo da requisição
-    const body = req.body
-
-    // Acessamos a propriedade `nomeDoProduto` do body
-    const nome = body.nome
+    const novoItem = req.body    
 
     // Checando se o `nome` está presente na requisição
-    if (!nome) {
+    if (!novoItem || !novoItem.nome) {
       return res.send(400).send('Corpo da requisição deve conter a propriedade `nome`.')
     }
 
-    // Adicionamos o item na lista
-    invetario.push(nome)
+    // Adicionamos o item na collection
+    await collection.insertOne(novoItem)
 
     // Exibimos uma mensagem de sucesso
-    res.status(201).send('Item adicionado com sucesso: ' + nome)
+    res.status(201).send(novoItem)
   })
 
   // Endpoint Update [PUT] /inventario
-  app.put('/inventario/:id', function (req, res) {
+  app.put('/inventario/:id', async function (req, res) {
     // Acessamos o parâmetro de rota ID
     const id = req.params.id
 
     // Acessamos o Body da requisição
-    const body = req.body
-
-    // Acessamos a propriedade `nomeDoProduto` do body
-    const nome = body.nome
+    const novoItem = req.body
 
     // Checando se o `nome` está presente na requisição
-    if (!nome) {
+    if (!novoItem || !novoItem.nome) {
       return res.send(400).send('Corpo da requisição deve conter a propriedade `nome`.')
     }
 
-    // Atualizamos o item na lista
-    invetario[id - 1] = nome
+    // Atualizamos na collection o novoItem pelo ID
+    await collection.updateOne(
+      { _id: new ObjectId(id)},
+      { $set: novoItem}
+    )
 
     // Enviamos uma mensagem de sucesso
-    res.send('Item atualizado com sucesso: ' + id + ' - ' + nome)
+    res.send(novoItem)
   })
 
   // Endpoint Delete [DELETE] /inventario/:id
-  app.delete('/inventario/:id', function (req, res) {
+  app.delete('/inventario/:id', async function (req, res) {
     // Acessamos o parâmtro de rota
     const id = req.params.id
 
-    // Checamos se o item com ID - 1 está na lista
-    if (!invetario[id - 1]) {
-      return res.status(404).send('Item não encontrado.')
-    }
+    // // Checamos se o item com ID - 1 está na lista
+    // if (!invetario[id - 1]) {
+    //   return res.status(404).send('Item não encontrado.')
+    // }
 
-    // Removemos o item da lista
-    delete invetario[id - 1]
+    // Removemos o item na collection usando o ID
+    await collection.deleteOne({ _id: new ObjectId(id) })
 
     // Enviamos uma mensagem de sucesso
     res.send('Item removido com sucesso: ' + id)
