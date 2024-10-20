@@ -1,27 +1,19 @@
 require('dotenv').config()
-// Módulo express
+// Módulos
 const express = require('express');
-
-// Módulo cors
 const cors = require('cors');
-const { MongoClient, ObjectId } = require('mongodb');
+const { connectToDatabase } = require('./db/database-connection');
+//const { MongoClient, ObjectId } = require('mongodb');
 
-// Preparamos as informações de acesso ao banco de dados
-const dbUrl = process.env.DATABASE_URL
-const dbName = 'backStoreInventory'
+
 
 // Declaramos a função main()
 async function main() {
+  // FIX: utilizar o connectToDatabase e receber o DB
+  await connectToDatabase()
 
-  // Realizamos a conexão com o client MongoDB
-  const client = new MongoClient(dbUrl)
-  console.log('Conectando ao banco de dados...')
-  await client.connect()
-  console.log('Banco de dados conectado com sucesso!')
 
-  // Realizamos a conexão com o banco de dados
-  const db = client.db(dbName)
-  const collection = db.collection('produto')
+  // const collection = db.collection('produto')
 
 
   // Criando o objeto express
@@ -29,6 +21,7 @@ async function main() {
 
   // Sinalizando para o Express que estamos usando JSON no Body
   app.use(express.json())
+
   // Habilitando cors para que a API seja consumida por diferentes dominios
   app.use(cors())
 
@@ -39,6 +32,7 @@ async function main() {
     res.end()
   })
 
+  /* FIX: mover isso para a pasta `produto`
   // Endpoint Read All (GET) /inventario
   app.get('/inventario', async function (req, res) {
     // Acessamos a lista de itens na collection do MongoDB
@@ -121,12 +115,13 @@ async function main() {
     // Enviamos uma mensagem de sucesso
     res.send('Item removido com sucesso: ' + id)
   })
+  */
 
   // Numero da porta
   const PORT = process.env.PORT || 5000;
 
   // Configuração do Servidor
-  app.listen(PORT, console.log(`Server started on port ${PORT}`));
+  app.listen(PORT, console.log(`Servidor rodando em http://localhost:${PORT}`));
 
 }
 
