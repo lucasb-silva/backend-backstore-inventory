@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const { connectToDatabase } = require('./db/database-connection');
+const inventarioRouter = require('./inventario/inventario.router')
 //const { MongoClient, ObjectId } = require('mongodb');
 
 
@@ -28,9 +29,11 @@ async function main() {
 
   // Requisição GET
   app.get('/', (req, res) => {
-    res.send('Aplicativo Node está executando')
+    res.send('Aplicativo está executando')
     res.end()
   })
+
+  app.use('/inventario', inventarioRouter)
 
   /* FIX: mover isso para a pasta `produto`
   // Endpoint Read All (GET) /inventario
