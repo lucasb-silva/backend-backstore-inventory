@@ -1,3 +1,4 @@
+require('dotenv').config()
 // Módulo express
 const express = require('express');
 
@@ -6,7 +7,7 @@ const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
 
 // Preparamos as informações de acesso ao banco de dados
-const dbUrl = ''
+const dbUrl = process.env.DATABASE_URL
 const dbName = 'backStoreInventory'
 
 // Declaramos a função main()
