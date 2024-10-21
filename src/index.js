@@ -6,8 +6,6 @@ const { connectToDatabase } = require('./db/database-connection');
 const inventarioRouter = require('./inventario/inventario.router')
 //const { MongoClient, ObjectId } = require('mongodb');
 
-
-
 // Declaramos a função main()
 async function main() {
   // FIX: utilizar o connectToDatabase e receber o DB
