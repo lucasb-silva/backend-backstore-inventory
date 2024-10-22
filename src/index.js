@@ -34,32 +34,6 @@ async function main() {
   app.use('/inventario', inventarioRouter)
 
   /* FIX: mover isso para a pasta `produto`
-  // Endpoint Read All (GET) /inventario
-  app.get('/inventario', async function (req, res) {
-    // Acessamos a lista de itens na collection do MongoDB
-    const itens = await collection.find().toArray()
-
-    // Enviamos a lista de itens como resultado
-    res.send(itens)
-  })
-
-  // Endpoint Read by ID [GET:id] /inventario/:id
-  app.get('/inventario/:id', async function (req, res) {
-    // Acessamos o parametro de rota ID
-    const id = req.params.id
-
-    // Acessa o item na collection usando o ID
-    const item = await collection.findOne({ _id: new ObjectId(id) })
-
-    // Checamos se o item existe
-    if (!item) {
-      return res.status(404).send('Item não encontrado')
-    }
-
-    // Enviamos o item como resposta
-    res.send(item)
-  })
-
   // Endpoint Create [POST] /inventario
   app.post('/inventario', async function (req, res) {
     // Acessamos o corpo da requisição

@@ -1,12 +1,26 @@
 const service = require('./inventario.service')
 
 async function readAll(req, res) {
+  // Acessamos a lista de produtos no Service
   const items = await service.readAll()
+
+  // Enviamos a lista de produtos como resultado
   res.send(items)
 }
 
-function readById(req, res) {
-  res.send('Read By ID')
+async function readById(req, res) {
+  // Acessamos o parametro de rota ID
+  const id = req.params.id
+
+  // Acessamos o produto no service através do ID
+  const item = await service.readById(id)
+
+  // Checamos se o item existe
+  if (!item) {
+    return res.status(404).send('Item não encontrado')
+  }
+
+  res.send(item)
 }
 
 function create(req, res) {
