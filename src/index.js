@@ -29,6 +29,7 @@ async function main() {
     res.end()
   })
 
+  // Router de Inventário
   app.use('/inventario', inventarioRouter)
 
   // Numero da porta
