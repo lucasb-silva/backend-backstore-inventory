@@ -34,46 +34,6 @@ async function main() {
   app.use('/inventario', inventarioRouter)
 
   /* FIX: mover isso para a pasta `produto`
-  // Endpoint Create [POST] /inventario
-  app.post('/inventario', async function (req, res) {
-    // Acessamos o corpo da requisição
-    const novoItem = req.body    
-
-    // Checando se o `nome` está presente na requisição
-    if (!novoItem || !novoItem.nome) {
-      return res.send(400).send('Corpo da requisição deve conter a propriedade `nome`.')
-    }
-
-    // Adicionamos o item na collection
-    await collection.insertOne(novoItem)
-
-    // Exibimos uma mensagem de sucesso
-    res.status(201).send(novoItem)
-  })
-
-  // Endpoint Update [PUT] /inventario
-  app.put('/inventario/:id', async function (req, res) {
-    // Acessamos o parâmetro de rota ID
-    const id = req.params.id
-
-    // Acessamos o Body da requisição
-    const novoItem = req.body
-
-    // Checando se o `nome` está presente na requisição
-    if (!novoItem || !novoItem.nome) {
-      return res.send(400).send('Corpo da requisição deve conter a propriedade `nome`.')
-    }
-
-    // Atualizamos na collection o novoItem pelo ID
-    await collection.updateOne(
-      { _id: new ObjectId(id)},
-      { $set: novoItem}
-    )
-
-    // Enviamos uma mensagem de sucesso
-    res.send(novoItem)
-  })
-
   // Endpoint Delete [DELETE] /inventario/:id
   app.delete('/inventario/:id', async function (req, res) {
     // Acessamos o parâmtro de rota

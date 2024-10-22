@@ -21,12 +21,23 @@ function readById(id) {
   
 }
 
-function create() {
+function create(novoItem) {
+  // Adicionamos na collection
+  return getCollection().insertOne(novoItem)
 
 }
 
-function updateByID() {
-
+/**
+ * 
+ * @param {string} id 
+ * @returns 
+ */
+function updateByID(id, novoItem) {
+  // Atualizamos o item na collection pelo ID
+  return getCollection().updateOne(
+    { _id: new ObjectId(id)},
+    { $set: novoItem }
+  )
 }
 
 function deleteByID() {
