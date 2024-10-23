@@ -32,6 +32,12 @@ async function main() {
   // Router de Inventário
   app.use('/inventario', inventarioRouter)
 
+  // Error Handling
+  app.use(function (err, req, res, next){
+    console.error(err.stack)
+    res.status(500).send({ error: 'Algo deu errado! '});
+  })
+
   // Numero da porta
   const PORT = process.env.PORT || 5000;
 
