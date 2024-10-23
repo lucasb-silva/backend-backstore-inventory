@@ -1,4 +1,4 @@
-const service = require('./inventario.service')
+const service = require('./produto.service')
 
 async function readAll(req, res) {
   // Acessamos a lista de produtos no Service

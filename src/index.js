@@ -8,7 +8,7 @@ require('express-async-errors')
 const { connectToDatabase } = require('./db/database-connection');
 
 // Routers
-const inventarioRouter = require('./inventario/inventario.router')
+const produtoRouter = require('./produto/produto.router')
 
 // Declaramos a função main()
 async function main() {
@@ -31,7 +31,7 @@ async function main() {
   })
 
   // Router de Inventário
-  app.use('/inventario', inventarioRouter)
+  app.use('/produto', produtoRouter)
 
   // Error Handling
   app.use(function (err, req, res, next){
