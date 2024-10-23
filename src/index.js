@@ -2,6 +2,7 @@ require('dotenv').config()
 // Módulos
 const express = require('express');
 const cors = require('cors');
+require('express-async-errors')
 
 // Database
 const { connectToDatabase } = require('./db/database-connection');
