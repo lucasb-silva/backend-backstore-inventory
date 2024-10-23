@@ -39,6 +39,11 @@ async function main() {
     res.status(500).send({ error: 'Algo deu errado! '});
   })
 
+  // Endpoint catch-all para rotas não encontradas (precisa ser o ultimo a ser declarado)
+  app.use('*', (req, res) => {
+    res.status(404).send({ error: 'Endpoint não encontrado.' })
+  })
+
   // Numero da porta
   const PORT = process.env.PORT || 5000;
 
