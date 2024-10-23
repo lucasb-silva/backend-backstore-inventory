@@ -1,12 +1,13 @@
 const express = require('express');
 const controller = require('./inventario.controller');
+const { validateObjectId } = require('../db/database.helper');
 
 const router = express.Router()
 
 router.get('/', controller.readAll)
-router.get('/:id', controller.readById)
+router.get('/:id', validateObjectId, controller.readById)
 router.post('/', controller.create)
-router.put('/:id', controller.updateByID)
-router.delete('/:id', controller.deleteByID)
+router.put('/:id', validateObjectId, controller.updateByID)
+router.delete('/:id', validateObjectId, controller.deleteByID)
 
 module.exports = router
