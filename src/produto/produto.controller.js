@@ -1,10 +1,11 @@
 const service = require('./produto.service')
 const produto = require('./produto.entity')
+const messages = require('joi-translation-pt-br')
 
 async function readAll(req, res) {
   // Acessamos a lista de produtos no Service
   const items = await service.readAll()
-
+  
   // Enviamos a lista de produtos como resultado
   res.send(items)
 }
@@ -26,7 +27,7 @@ async function readById(req, res) {
 
 async function create(req, res) {
   // Acessamos e validamos corpo da requisição
-  const {error, value: novoItem} = produto.validate(req.body)
+  const {error, value: novoItem} = produto.validate(req.body, messages)
 
   // Checando se temos algum erro na validação
   if (error) {
