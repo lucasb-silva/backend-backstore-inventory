@@ -1,4 +1,5 @@
 const service = require('./produto.service')
+const produto = require('./produto.entity')
 
 async function readAll(req, res) {
   // Acessamos a lista de produtos no Service
@@ -24,12 +25,12 @@ async function readById(req, res) {
 }
 
 async function create(req, res) {
-  // Acessamos o corpo da requisição
-  const novoItem = req.body
+  // Acessamos e validamos corpo da requisição
+  const {error, value: novoItem} = produto.validate(req.body)
 
-  // Checando se o `nome` está presente na requisição
-  if (!novoItem || !novoItem.nome) {
-    return res.send(400).send('Corpo da requisição deve conter a propriedade `nome`.')
+  // Checando se temos algum erro na validação
+  if (error) {
+    return res.status(400).send({ error: error.details[0].message })
   }
 
   // Adicionamos o item no DB através do Service
@@ -40,15 +41,15 @@ async function create(req, res) {
 }
 
 async function updateByID(req, res) {
-  // Acessamos o parâmetro de rota ID
+  // Acessamos o parâmtro de rota
   const id = req.params.id
+  
+  // Acessamos e validamos corpo da requisição
+  const {error, value: novoItem} = produto.validate(req.body)
 
-  // Acessamos o Body da requisição
-  const novoItem = req.body
-
-  // Checando se o `nome` está presente na requisição
-  if (!novoItem || !novoItem.nome) {
-    return res.send(400).send('Corpo da requisição deve conter a propriedade `nome`.')
+  // Checando se temos algum erro na validação
+  if (error) {
+    return res.status(400).send({ error: error.details[0].message })
   }
 
   // Atualizamos o item no DB através do Service
@@ -63,10 +64,18 @@ async function deleteByID(req, res) {
   const id = req.params.id
 
   // Removemos o item do DB através do Service
-  await service.deleteByID(id)
+  const result = await service.deleteByID(id)
+
+  // Verifica se o item existe na base de dados
+  if(result.deletedCount){
+    // Enviamos uma mensagem de sucesso
+    res.send('Item removido com sucesso: ' + id)
+  } else {
+    // Enviamos uma mensagem de erro
+    res.status(404).send('Item não existe na base de dados.')
+  }
   
-  // Enviamos uma mensagem de sucesso
-  res.send('Item removido com sucesso: ' + id)
+  
 }
 
 module.exports = {
