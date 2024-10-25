@@ -69,7 +69,7 @@ async function deleteByID(req, res) {
   // Verifica se o item existe na base de dados
   if(result.deletedCount){
     // Enviamos uma mensagem de sucesso
-    res.send('Item removido com sucesso: ' + id)
+    res.status(204).send()
   } else {
     // Enviamos uma mensagem de erro
     res.status(404).send('Item não existe na base de dados.')
