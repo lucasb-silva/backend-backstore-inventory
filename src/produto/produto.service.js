@@ -1,6 +1,9 @@
+// Representação do tipo ObjectId
 const { ObjectId } = require('mongodb')
+// Obtem o banco dados após fazer a conexão
 const { getDatabase } = require('../db/database-connection')
 
+// Obtem a coleção 'produto'
 function getCollection() {
   return getDatabase().collection('produto')
 }

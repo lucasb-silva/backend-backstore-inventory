@@ -1,10 +1,13 @@
+// Carrega conteudo do .env para o process.env
 require('dotenv').config()
-// Módulos
+// Módulo para criar aplicação express
 const express = require('express');
+// Módulo para permitir acesso a aplicaçao de diferentes dominios
 const cors = require('cors');
+// Módulo para lidar com erros async
 require('express-async-errors')
 
-// Database
+// Banco de dados
 const { connectToDatabase } = require('./db/database-connection');
 
 // Routers

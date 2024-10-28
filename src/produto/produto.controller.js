@@ -1,7 +1,13 @@
+// Interage com o banco dedos
 const service = require('./produto.service')
+
+// Validar o objeto enviado na requisição
 const produto = require('./produto.entity')
+
+// Traduzir mensagens de erro de validação para pt-br
 const messages = require('joi-translation-pt-br')
 
+// Retorna todos os itens
 async function readAll(req, res) {
   // Acessamos a lista de produtos no Service
   const items = await service.readAll()
@@ -10,6 +16,7 @@ async function readAll(req, res) {
   res.send(items)
 }
 
+// Retorna o item pelo id
 async function readById(req, res) {
   // Acessamos o parametro de rota ID
   const id = req.params.id
@@ -25,6 +32,7 @@ async function readById(req, res) {
   res.send(item)
 }
 
+// Cria novo item na coleção
 async function create(req, res) {
   // Acessamos e validamos corpo da requisição
   const {error, value: novoItem} = produto.validate(req.body, messages)
@@ -41,6 +49,7 @@ async function create(req, res) {
   res.status(201).send(novoItem)
 }
 
+// Atuliza um item na coleção pelo ID
 async function updateByID(req, res) {
   // Acessamos o parâmtro de rota
   const id = req.params.id
@@ -60,6 +69,7 @@ async function updateByID(req, res) {
   res.send(novoItem)
 }
 
+// Remove um item da coleção pelo ID
 async function deleteByID(req, res) {
   // Acessamos o parâmtro de rota
   const id = req.params.id
